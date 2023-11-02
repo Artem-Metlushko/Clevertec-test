@@ -1,5 +1,6 @@
 package ru.clevertec.product.mapper;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,19 +44,19 @@ class ProductMapperTest {
     @Test
     void toInfoProductDtoShouldReturnValidResult() {
         //given
-        Product mockProduct = TestDataBuilder.builder()
+        Product expected = TestDataBuilder.builder()
                 .withName("Картоха")
                 .build().buildProduct();
 
         //when
-        InfoProductDto actual = productMapper.toInfoProductDto(mockProduct);
+        InfoProductDto actual = productMapper.toInfoProductDto(expected);
 
         //then
         assertThat(actual)
-                .hasFieldOrPropertyWithValue("name", mockProduct.getName())
-                .hasFieldOrPropertyWithValue("uuid", mockProduct.getUuid())
-                .hasFieldOrPropertyWithValue("description", mockProduct.getDescription())
-                .hasFieldOrPropertyWithValue("price", mockProduct.getPrice());
+                .hasFieldOrPropertyWithValue(Product.Fields.name, expected.getName())
+                .hasFieldOrPropertyWithValue("uuid", expected.getUuid())
+                .hasFieldOrPropertyWithValue("description", expected.getDescription())
+                .hasFieldOrPropertyWithValue("price", expected.getPrice());
     }
 
     @Test
@@ -69,11 +70,12 @@ class ProductMapperTest {
 
         //then
         assertThat(actual)
-                .hasFieldOrPropertyWithValue("name", mockProductDto.name())
-                .hasFieldOrPropertyWithValue("description", mockProductDto.description())
-                .hasFieldOrPropertyWithValue("price", mockProductDto.price())
-                .hasFieldOrPropertyWithValue("created", mockProduct.getCreated());
+                .hasFieldOrPropertyWithValue(Product.Fields.name, mockProductDto.name())
+                .hasFieldOrPropertyWithValue(Product.Fields.description, mockProductDto.description())
+                .hasFieldOrPropertyWithValue(Product.Fields.price, mockProductDto.price())
+                .hasFieldOrPropertyWithValue(Product.Fields.created, mockProduct.getCreated());
     }
+
     @ParameterizedTest
     @MethodSource("provideListProduct")
     void toProductShouldHaveUuid(Product mockProduct, boolean expected) {
@@ -85,18 +87,15 @@ class ProductMapperTest {
         //then
         assertEquals(expected, infoProductDto.uuid() != null);
     }
+
     private static Stream<Arguments> provideListProduct() {
-        boolean blank = !new UUID(0, 0).toString().isBlank();
         return Stream.of(
                 Arguments.of(TestDataBuilder.builder()
                         .withUuid(null)
                         .build().buildProduct(), false),
                 Arguments.of(TestDataBuilder.builder()
                         .withUuid(UUID.fromString("9755b24d-beba-4cef-b397-2e1f429385d3"))
-                        .build().buildProduct(), true),
-                Arguments.of(TestDataBuilder.builder()
-                        .withUuid(new UUID(0, 0))
-                        .build().buildProduct(), blank)
+                        .build().buildProduct(), true)
         );
     }
 }
