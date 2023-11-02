@@ -10,7 +10,9 @@ import ru.clevertec.product.entity.Product;
 import ru.clevertec.product.util.FruitNameGenerator;
 import ru.clevertec.product.util.TestDataBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +22,9 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 @ExtendWith(MockitoExtension.class)
 class InMemoryProductRepositoryTest {
 
-    private InMemoryProductRepository productRepository = new InMemoryProductRepository();
+    private Map<UUID, Product> products =new HashMap<>();
+    private InMemoryProductRepository productRepository = new InMemoryProductRepository(products);
+
     @Mock
     private InMemoryProductRepository mockProductRepository;
 
