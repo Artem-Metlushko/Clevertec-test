@@ -5,6 +5,7 @@ import ru.clevertec.product.entity.Product;
 import ru.clevertec.product.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Map;
