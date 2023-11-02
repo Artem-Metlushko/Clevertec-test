@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Map;
+import java.util.ArrayList;
 
 @RequiredArgsConstructor
 public class InMemoryProductRepository implements ProductRepository {
@@ -16,21 +18,28 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Optional<Product> findById(UUID uuid) {
-        return Optional.empty();
+
+        return products.values().stream().findFirst();
+
     }
 
     @Override
     public List<Product> findAll() {
-        return null;
+
+        return new ArrayList<>(products.values());
     }
 
     @Override
     public Product save(Product product) {
-        return null;
+        product.setUuid(UUID.randomUUID());
+        products.put(product.getUuid(), product);
+
+        return product;
     }
 
     @Override
     public void delete(UUID uuid) {
 
+        products.remove(uuid);
     }
 }
