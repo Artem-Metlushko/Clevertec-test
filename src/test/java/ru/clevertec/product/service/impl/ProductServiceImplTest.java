@@ -16,6 +16,7 @@ import ru.clevertec.product.entity.Product;
 import ru.clevertec.product.mapper.ProductMapper;
 import ru.clevertec.product.repository.ProductRepository;
 import ru.clevertec.product.util.TestDataBuilder;
+import ru.clevertec.product.validation.Validate;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,8 @@ class ProductServiceImplTest {
     private ProductRepository repository;
     @Mock
     private ProductMapper mapper;
+    @Mock
+    private Validate validate;
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -129,7 +132,9 @@ class ProductServiceImplTest {
         UUID uuid = product.getUuid();
         when(repository.findById(uuid))
                 .thenReturn(Optional.of(product));
-        when(repository.save(any()))
+        when(repository.save(product))
+                .thenReturn(product);
+        when(mapper.merge(product,productDto))
                 .thenReturn(product);
 
         //when
